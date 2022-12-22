@@ -1,23 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import { gql, useSubscription } from '@apollo/client';
+
+
+const COINS_SUBSCRIPTION = gql`
+  subscription CoinCreated {
+    coinCreated {
+      description
+      coinType
+  }
+  }
+`
+
 
 function App() {
+
+  const { data } = useSubscription(
+    COINS_SUBSCRIPTION, 
+    {
+      onData: (obj) => {
+        const result = obj.data.data.coinCreated
+        console.log(result);
+      }, 
+      variables: 'mi nueva data'
+    }
+  ) 
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      hola
     </div>
   );
 }
