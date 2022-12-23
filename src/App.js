@@ -1,6 +1,5 @@
 import { gql, useSubscription } from '@apollo/client';
 
-
 const COINS_SUBSCRIPTION = gql`
   subscription CoinCreated {
     coinCreated {
@@ -10,24 +9,27 @@ const COINS_SUBSCRIPTION = gql`
   }
 `
 
-
 function App() {
 
-  const { data } = useSubscription(
-    COINS_SUBSCRIPTION, 
-    {
-      onData: (obj) => {
-        const result = obj.data.data.coinCreated
-        console.log(result);
-      }, 
-      variables: 'mi nueva data'
-    }
-  ) 
+  const { data, loading, error } = useSubscription(
+    COINS_SUBSCRIPTION,
+    // {
+    //   onData: (data) => {
+    //     const coin = data.data.data.coinCreated
+    //     console.log(coin);
+    //   }
+    // }
+    );
+    
+    if (loading) return <p>Loading...</p>
+    if (error) return <p>Error: {error.message} </p>
 
+    const { description, coinType } = data.coinCreated;
 
-  return (
+    return (
     <div className="App">
-      hola
+      <p>{ description }</p>
+      <p>{ coinType }</p>
     </div>
   );
 }
